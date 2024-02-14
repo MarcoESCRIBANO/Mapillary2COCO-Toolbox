@@ -69,6 +69,6 @@ This python script helps you visualize your dataset mask and bbox.
 
 ## Sources
 
-* [Mapillary2COCO repository from Luodian](https://github.com/Luodian/Mapillary2COCO)
-- [show-coco-annos.py from tangh](https://gist.github.com/tangh/0d398813dd3e64a72d830149c0363742)
+* [Mapillary2COCO](https://github.com/Luodian/Mapillary2COCO) repository from [Luodian](https://github.com/Luodian)
+* [show-coco-annos.py](https://gist.github.com/tangh/0d398813dd3e64a72d830149c0363742) from [tangh](https://gist.github.com/tangh)
 

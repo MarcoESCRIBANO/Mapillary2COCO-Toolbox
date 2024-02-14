@@ -5,11 +5,7 @@
 
 * [Mapillary to COCO annotations](#Convert-Mapillary-Vistas-Dataset-to-Coco-annotations-format)
 * [Resize images and COCO annotations](#Resize-images-and-COCO-annotations)
-* [API Reference](#api-reference)
-* [Code Examples](#code-examples)
-* [Pre-Trained Models](#pre-trained-models)
-* [System Requirements](#recommended-system-requirements)
-* [Change Log](CHANGELOG.md)
+* [Show COCO format mask and bbox on image](#Show-COCO-format-mask-and-bbox-on-image)
 
 ## Convert Mapillary Vistas Dataset to Coco annotations format
 

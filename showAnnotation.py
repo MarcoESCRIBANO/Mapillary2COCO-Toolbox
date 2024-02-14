@@ -4,15 +4,19 @@ import cv2
 import operator
 import os
 
-# map_dataset_path = "/MapillaryVistas/"
-map_dataset_path = "/MapillaryVistasResized/"
+### Set parameters ###
 
-train_val_path = "training"
-# train_val_path = "validation"
+# MAP_DATASET_PATH = "/MapillaryVistas/"
+MAP_DATASET_PATH = "/MapillaryVistasResized/"
 
-Map = COCO(map_dataset_path + train_val_path + "/v2.0/instances_shape_" + train_val_path + "2020.json")
+TRAIN_VAL_PATH = "training"
+# TRAIN_VAL_PATH = "validation"
 
-if "Resized" in map_dataset_path:
+
+
+Map = COCO(MAP_DATASET_PATH + TRAIN_VAL_PATH + "/v2.0/instances_shape_" + TRAIN_VAL_PATH + "2020.json")
+
+if "Resized" in MAP_DATASET_PATH:
     ann_ids = Map.getAnnIds(iscrowd=False)
 else:
     ann_ids = Map.getAnnIds(iscrowd=True)
@@ -31,7 +35,7 @@ for ann in anns:
     bbox = np.array(ann["bbox"])
     bbox[2:4] = bbox[0:2] + bbox[2:4]
     
-    temp_image_path = map_dataset_path + "RLE_label.png"
+    temp_image_path = MAP_DATASET_PATH + "RLE_label.png"
     
     assert sum(segm['counts']) == segm['size'][0] * segm['size'][1]
 
@@ -50,9 +54,9 @@ for ann in anns:
 
     image_info = Map.loadImgs(image_id)
     image_path = image_info[0]["file_name"]
-    image_path = map_dataset_path + train_val_path + "/images/" + image_path
+    image_path = MAP_DATASET_PATH + TRAIN_VAL_PATH + "/images/" + image_path
     image = cv2.imread(image_path)
-    save_labeled_image_path = map_dataset_path + "Labelled_" + train_val_path + "_image"+ str(image_id) + ".png"
+    save_labeled_image_path = MAP_DATASET_PATH + "Labelled_" + TRAIN_VAL_PATH + "_image"+ str(image_id) + ".png"
     
     if (os.path.isfile(save_labeled_image_path) is False) or (image_id != last_image_id):
         cv2.imwrite(save_labeled_image_path, image)

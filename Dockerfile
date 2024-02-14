@@ -4,7 +4,9 @@ RUN apt update -y
 RUN pip install --upgrade pip
  
 RUN pip install opencv-python-headless numpy imageio scikit-image pycocotools
-RUN apt-get install -y libgl1-mesa-dev
+
+# If needed for opencv
+RUN apt-get install -y libgl1-mesa-dev 
 
 
 COPY . .

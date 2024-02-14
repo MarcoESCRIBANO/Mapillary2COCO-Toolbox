@@ -13,19 +13,17 @@ import multiprocessing as mp
 import pycococreatortools
 import datetime
 
-FULL_CPU = True
+### Set parameters ###
+
+# FULL_CPU: False will reduce the cpu count by CPU_REDUCTION
+# FULL_CPU: True will use the maximal capabilities of your cpu (can slow down your computer) 
+FULL_CPU = False
+
+# Reduce the cpu count by 4 when FULL_CPU is False
+CPU_REDUCTION = 4 
 
 # For running large dataset (split the execution in batch to be able to run in part, to not restart from scratch if it crash)
 BATCH_SIZE = 600 
-
-INFO = {
-    "description": "Mapillary",
-    "url": "https://github.com/waspinator/pycococreator",
-    "version": "0.1.0",
-    "year": 2018,
-    "contributor": "Luodian",
-    "date_created": datetime.datetime.utcnow().isoformat(" "),
-}
 
 LICENSES = [
     {
@@ -1631,7 +1629,7 @@ def load_datasets_and_proc(dataset_root, dir_name, files):
     if(FULL_CPU):
         pool = mp.Pool(os.cpu_count())
     else:
-        pool = mp.Pool(os.cpu_count()-4)
+        pool = mp.Pool(os.cpu_count()-CPU_REDUCTION)
 
     with open("./config_Full.json") as config_file:
         config = json.load(config_file)

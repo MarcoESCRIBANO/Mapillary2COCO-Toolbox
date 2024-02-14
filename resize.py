@@ -7,10 +7,14 @@ import shutil
 from pycocotools.coco import COCO
 from pycocotools import mask
 
+### Set parameters ###
+
 NEW_SIZE = 550
 TO_COCO_CAT = True
-# CAT_MAPPING = {old_cat:new_cat,...} (new_cat is the COCO equivalent to your old_cat who is the mapillary cat)
+
+# CAT_MAPPING: {old_cat:new_cat,...} (new_cat is the COCO equivalent to your old_cat who is the mapillary cat)
 CAT_MAPPING = {1:1, 2:1, 3:1, 4:1, 5:9, 6:6, 7:3, 8:3, 9:4, 10:7, 11:3, 12:3, 13:8}
+
 
 
 

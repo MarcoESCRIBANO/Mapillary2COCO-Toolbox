@@ -11,7 +11,7 @@
 
 >main.py
 
-This python script helps you convert your mapillary vistas dataset to coco format.
+This python script helps you convert your mapillary vistas dataset to coco format and choose the classes you want to keep.
 
 #### Brief Introduction
 

@@ -2,11 +2,10 @@
     This file shows how to load and use the dataset
 """
 
-from __future__ import print_function
+# from __future__ import print_function
 
 import json
 import os
-import sys
 
 import numpy as np
 import warnings
@@ -18,6 +17,8 @@ import multiprocessing as mp
 import pycococreatortools
 import datetime
 import fnmatch
+
+FULL_CPU = False
 
 INFO = {
     "description": "Mapillary",
@@ -304,7 +305,10 @@ def load_datasets_and_proc(dataset_root, dir_name, files):
     warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
     each_image_json = dict({"images": [], "annotations": []})
 
-    pool = mp.Pool(os.cpu_count()-4)
+    if(FULL_CPU):
+        pool = mp.Pool(os.cpu_count())
+    else:
+        pool = mp.Pool(os.cpu_count()-4)
 
     with open("./config.json") as config_file:
         config = json.load(config_file)
@@ -360,13 +364,14 @@ def main(dir_name, dataset_root, sample_type):
         os.makedirs("{}/{}/massive_annotations".format(dataset_root, dir_name))
 
     batch = 0
-    for files in files_list:
-        batch+=1
-        print("Batch n°{}".format(batch))
-        if batch > 0:
-            load_datasets_and_proc(dataset_root, dir_name, files)
-    # load_datasets_and_proc(dataset_root, dir_name, files)
-    
+    if not files_list:
+        load_datasets_and_proc(dataset_root, dir_name, files)
+    else:
+        for files in files_list:
+            batch+=1
+            print("Batch n°{}".format(batch))
+            if batch > 0:
+                load_datasets_and_proc(dataset_root, dir_name, files)
 
     combined_annotations = {
         "info": INFO,

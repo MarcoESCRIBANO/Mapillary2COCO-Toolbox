@@ -13,11 +13,14 @@
 ## Build and Run
 
 >compose.yaml
+
 Put the dataset folder path you want to work with in volumes.
 
 >Dockerfile
+
 Choose the command you want to execute (ex: ENTRYPOINT [ "python", "/main.py" ] -> convert to COCO)
 
+Build and run
 ```zsh
 docker compose up --build &> run.log # Build image, run and save log into a log file
 ```

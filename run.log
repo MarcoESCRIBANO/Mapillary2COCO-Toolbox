@@ -5,7 +5,7 @@
 #1 DONE 0.0s
 
 #2 [app internal] load metadata for docker.io/library/python:3.10.12
-#2 DONE 0.8s
+#2 DONE 0.4s
 
 #3 [app internal] load .dockerignore
 #3 transferring context: 2B done
@@ -15,16 +15,16 @@
 #4 DONE 0.0s
 
 #5 [app internal] load build context
-#5 transferring context: 34.41kB done
+#5 transferring context: 21.97kB done
 #5 DONE 0.0s
 
-#6 [app 3/6] RUN pip install --upgrade pip
+#6 [app 2/6] RUN apt update -y
 #6 CACHED
 
-#7 [app 2/6] RUN apt update -y
+#7 [app 4/6] RUN pip install opencv-python-headless numpy imageio scikit-image pycocotools
 #7 CACHED
 
-#8 [app 4/6] RUN pip install opencv-python-headless numpy imageio scikit-image pycocotools
+#8 [app 3/6] RUN pip install --upgrade pip
 #8 CACHED
 
 #9 [app 5/6] RUN apt-get install -y libgl1-mesa-dev
@@ -35,10 +35,52 @@
 
 #11 [app] exporting to image
 #11 exporting layers 0.0s done
-#11 writing image sha256:077bd2af7ce145b3393f233046c90a80fb09215a8579ab15d965ede7d0535c11 done
+#11 writing image sha256:2b9d1eebd02fc441ef28d41783d26ae0552fc63abd0d25c96346065e8c8bb7e0 done
 #11 naming to docker.io/library/mapillary2coco-master-app done
 #11 DONE 0.0s
  Container Mapillary2COCO  Recreate
  Container Mapillary2COCO  Recreated
- Container Mapillary2COCO  Starting
- Container Mapillary2COCO  Started
+Attaching to Mapillary2COCO
+Mapillary2COCO  | Loading image 1: -3BbEwDFdZ6kvDrbqhNShw.png
+Mapillary2COCO  | Loading image 2: -0GQmYRienNVqEKiQ0Mkyw.png
+Mapillary2COCO  | Loading image 3: -0C1J9CvgFP4BTVLXNeNZA.png
+Mapillary2COCO  | Loading image 4: -1Z28Rrc91syhk-y8Bp_cg.png
+Mapillary2COCO  | Loading image 5: -3Ce66lOpbY2j4Tgngr-dQ.png
+Mapillary2COCO  | Loading image 6: -0Q9X3KqBrhdlGzap-YToQ.png
+Mapillary2COCO  | Loading image 7: -0QdotcnWZMgDLHELjMeoQ.png
+Mapillary2COCO  | Loading image 8: RvtKJYv4Ig7xYGEIwLibdA.png
+Mapillary2COCO  | Loading image 9: -3bnLdeHkonpmCJj3a1X_w.png
+Mapillary2COCO  | Loading image 10: -2H8gOJp_LEvus2Y6pCIOA.png
+Mapillary2COCO  | Loading image 11: -0xySwkm6plG4nznHLQcHg.png
+Mapillary2COCO  | Saving to /MapillaryVistas/training/v2.0/massive_annotations/image4_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/training/v2.0/massive_annotations/image3_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/training/v2.0/massive_annotations/image11_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/training/v2.0/massive_annotations/image1_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/training/v2.0/massive_annotations/image2_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/training/v2.0/massive_annotations/image9_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/training/v2.0/massive_annotations/image5_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/training/v2.0/massive_annotations/image7_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/training/v2.0/massive_annotations/image8_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/training/v2.0/massive_annotations/image10_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/training/v2.0/massive_annotations/image6_info.json
+Mapillary2COCO  | Loading image 1: -4jzRzGfKmQg8RBNlNqnGQ.png
+Mapillary2COCO  | Loading image 2: _3JWmnl2ILeemJ9qoxHJCg.png
+Mapillary2COCO  | Loading image 3: _2yFuPMD1eo4D1sHkx-c4Q.png
+Mapillary2COCO  | Loading image 4: _4ycMRRZcIpTeDT8MqtIDw.png
+Mapillary2COCO  | Loading image 5: _4SjTmQ-zn3XSv4D1-Tg4w.png
+Mapillary2COCO  | Loading image 6: -32tlgoydG0ZCyijh8piZQ.png
+Mapillary2COCO  | Loading image 7: _1Gn_xkw7sa_i9GU4mkxxQ.png
+Mapillary2COCO  | Loading image 8: -9y4NjcjdoPFMs5wwC7otg.png
+Mapillary2COCO  | Loading image 9: -3-MmXdwhyIQhtb4-8NqHQ.png
+Mapillary2COCO  | Loading image 10: _6lYRZS5jTuojhqapjEL1Q.png
+Mapillary2COCO  | Saving to /MapillaryVistas/validation/v2.0/massive_annotations/image1_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/validation/v2.0/massive_annotations/image9_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/validation/v2.0/massive_annotations/image3_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/validation/v2.0/massive_annotations/image2_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/validation/v2.0/massive_annotations/image7_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/validation/v2.0/massive_annotations/image6_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/validation/v2.0/massive_annotations/image8_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/validation/v2.0/massive_annotations/image10_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/validation/v2.0/massive_annotations/image4_info.json
+Mapillary2COCO  | Saving to /MapillaryVistas/validation/v2.0/massive_annotations/image5_info.json
+Mapillary2COCO exited with code 0

@@ -15,6 +15,9 @@ import datetime
 
 FULL_CPU = True
 
+# For running large dataset (split the execution in batch to be able to run in part, to not restart from scratch if it crash)
+BATCH_SIZE = 600 
+
 INFO = {
     "description": "Mapillary",
     "url": "https://github.com/waspinator/pycococreator",
@@ -1667,7 +1670,7 @@ def main(dir_name, dataset_root, sample_type):
     files = []
     i = 0
     for f in os.listdir(dir_path):
-        if i > 100 and i % 600 == 1:
+        if i > BATCH_SIZE//10 and i % BATCH_SIZE == 1:
             files_list.append(files)
             files = []
         if f.endswith("png"):

@@ -7,7 +7,12 @@ import shutil
 from pycocotools.coco import COCO
 from pycocotools import mask
 
-NEW_SIZE = NEW_SIZE
+NEW_SIZE = 550
+TO_COCO_CAT = True
+# CAT_MAPPING = {old_cat:new_cat,...} (new_cat is the COCO equivalent to your old_cat who is the mapillary cat)
+CAT_MAPPING = {1:1, 2:1, 3:1, 4:1, 5:9, 6:6, 7:3, 8:3, 9:4, 10:7, 11:3, 12:3, 13:8}
+
+
 
 def resize_Images(dir_path, saving_path, file_type):
     files_image = []
@@ -36,34 +41,10 @@ def resize_Images(dir_path, saving_path, file_type):
         
 
 def mapCatToCOCOCat(cat_id):
-    if cat_id == 1:
-        return 1
-    elif cat_id == 2:
-        return 1
-    elif cat_id == 3:
-        return 1
-    elif cat_id == 4:
-        return 1
-    elif cat_id == 5:
-        return 9
-    elif cat_id == 6:
-        return 6
-    elif cat_id == 7:
-        return 3
-    elif cat_id == 8:
-        return 3
-    elif cat_id == 9:
-        return 4
-    elif cat_id == 10:
-        return 7
-    elif cat_id == 11:
-        return 3
-    elif cat_id == 12:
-        return 3
-    elif cat_id == 13:
-        return 8
-    else:
-        return -1
+    cat_id = CAT_MAPPING.get(cat_id)
+    if cat_id == None:
+        cat_id = -1
+    return cat_id
     
 
 
@@ -90,9 +71,10 @@ def resize_Annotations(dir_path, saving_path, file_name):
         ann_id = ann['id']
         image_id = ann["image_id"]
         
-        # For coco eval on yolact
-        cat_id = ann["category_id"]
-        cat_id = mapCatToCOCOCat(cat_id)
+        if TO_COCO_CAT:
+            # For quick eval on models pre-trained on COCO
+            cat_id = ann["category_id"]
+            cat_id = mapCatToCOCOCat(cat_id)
         
         assert sum(segm['counts']) == segm['size'][0] * segm['size'][1]
 
@@ -145,9 +127,10 @@ def resize_Annotations(dir_path, saving_path, file_name):
             data['annotations'][ann_id-1]['bbox'] = [round(bbox[0]*down_w/w,1), round(bbox[1]*down_h/h,1), round(bbox[2]*down_w/w,1), round(bbox[3]*down_h/h,1)]
             data['annotations'][ann_id-1]['area'] = int(mask.area(mask.encode(np.asfortranarray(image_resized_binary.astype(np.uint8)))))
             
-            # For coco eval on yolact
-            data['annotations'][ann_id-1]['category_id'] = cat_id
-            data['annotations'][ann_id-1]['iscrowd'] = 0
+            if TO_COCO_CAT:
+                # For quick eval on models pre-trained on COCO
+                data['annotations'][ann_id-1]['category_id'] = cat_id
+                data['annotations'][ann_id-1]['iscrowd'] = 0
             
             if  image_id != last_image_id:
                 data['images'][image_id-1]['width'] = down_w
@@ -165,31 +148,24 @@ def main(dir_name_train, dir_name_val, dataset_root):
     # Training data
     # 
     dir_image_path = "{}/{}/images".format(dataset_root, dir_name_train)
-    # dir_instance_path = "{}/{}/v2.0/instances".format(dataset_root, dir_name_train)
     dir_annotation_path = "{}/{}/v2.0".format(dataset_root, dir_name_train)
     
     saving_image_path = "{}Resized/{}/images".format(dataset_root, dir_name_train)
-    # saving_instance_path = "{}Resized/{}/v2.0/instances".format(dataset_root, dir_name_train)
     saving_annotation_path = "{}Resized/{}/v2.0".format(dataset_root, dir_name_train)
     
     pool.apply_async(resize_Images,args=(dir_image_path, saving_image_path, "jpg"))
-    # pool.apply_async(resize_Images,args=(dir_instance_path, saving_instance_path, "png"))
     pool.apply_async(resize_Annotations,args=(dir_annotation_path, saving_annotation_path, "instances_shape_training2020.json"))
-    # resize_Annotations(dir_annotation_path, saving_annotation_path, "instances_shape_training2020.json")
     
     # 
     # Validation data
     #     
     dir_image_path = "{}/{}/images".format(dataset_root, dir_name_val)
-    # dir_instance_path = "{}/{}/v2.0/instances".format(dataset_root, dir_name_val)
     dir_annotation_path = "{}/{}/v2.0".format(dataset_root, dir_name_val)
     
     saving_image_path = "{}Resized/{}/images".format(dataset_root, dir_name_val)
-    # saving_instance_path = "{}Resized/{}/v2.0/instances".format(dataset_root, dir_name_val)
     saving_annotation_path = "{}Resized/{}/v2.0".format(dataset_root, dir_name_val)
     
     pool.apply_async(resize_Images,args=(dir_image_path, saving_image_path, "jpg"))
-    # pool.apply_async(resize_Images,args=(dir_instance_path, saving_instance_path, "png"))
     pool.apply_async(resize_Annotations,args=(dir_annotation_path, saving_annotation_path, "instances_shape_validation2020.json"))
 
     pool.close()

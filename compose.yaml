@@ -3,8 +3,10 @@ services:
     build: 
       dockerfile: Dockerfile
     volumes:
+      # - /YourMapillaryVistasDatasetFolderPath:/MapillaryVistas
+      # - /YourMapillaryVistasResizedDatasetFolderPath:/MapillaryVistasResized
       - /home/escribano/Documents/Datasets/MapillaryVistasImageTest:/MapillaryVistas
-      # - /home/escribano/Documents/Datasets/MapillaryVistasImageTestResized:/MapillaryVistasResized
+      - /home/escribano/Documents/Datasets/MapillaryVistasImageTestResized:/MapillaryVistasResized
       # - /home/escribano/Documents/Datasets/MapillaryVistasSample:/MapillaryVistas
       # - /home/escribano/Documents/Datasets/MapillaryVistasSampleResized:/MapillaryVistasResized
       # - /home/escribano/Documents/Datasets/MapillaryVistas:/MapillaryVistas

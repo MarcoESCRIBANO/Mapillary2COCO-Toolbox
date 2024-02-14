@@ -4,16 +4,18 @@ import cv2
 import operator
 import os
 
-map_dataset_path = "/MapillaryVistas/"
-# map_dataset_path = "/MapillaryVistasResized/"
+# map_dataset_path = "/MapillaryVistas/"
+map_dataset_path = "/MapillaryVistasResized/"
 
 train_val_path = "training"
 # train_val_path = "validation"
 
 Map = COCO(map_dataset_path + train_val_path + "/v2.0/instances_shape_" + train_val_path + "2020.json")
 
-
-ann_ids = Map.getAnnIds(iscrowd=True)
+if "Resized" in map_dataset_path:
+    ann_ids = Map.getAnnIds(iscrowd=False)
+else:
+    ann_ids = Map.getAnnIds(iscrowd=True)
 anns = Map.loadAnns(ann_ids)
 cats = Map.cats
 anns1 = [ann for ann in anns if len(ann['segmentation']) > 1]

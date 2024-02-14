@@ -13,7 +13,13 @@ import multiprocessing as mp
 import pycococreatortools
 import datetime
 
-FULL_CPU = False
+
+# FULL_CPU = False will reduce the cpu count by 4 (can be change at FULL_CPU reference ligne) 
+# FULL_CPU = True will use the maximal capabilities of your cpu (can slow down your computer) 
+FULL_CPU = False 
+
+# For running large dataset (split the execution in batch to be able to run in part, to not restart from scratch if it crash)
+BATCH_SIZE = 600 
 
 INFO = {
     "description": "Mapillary",
@@ -342,7 +348,7 @@ def main(dir_name, dataset_root, sample_type):
     files = []
     i = 0
     for f in os.listdir(dir_path):
-        if i > 100 and i % 600 == 1:
+        if i > BATCH_SIZE//10 and i % BATCH_SIZE == 1:
             files_list.append(files)
             files = []
         if f.endswith("png"):

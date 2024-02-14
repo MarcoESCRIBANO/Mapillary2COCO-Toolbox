@@ -7,7 +7,7 @@
 * [Mapillary to COCO annotations](#Convert-Mapillary-Vistas-Dataset-to-Coco-annotations-format)
 * [Resize images and COCO annotations](#Resize-images-and-COCO-annotations)
 * [Show COCO format mask and bbox on image](#Show-COCO-format-mask-and-bbox-on-image)
-
+* [Sources](#Sources)
 
 
 ## Getting Started

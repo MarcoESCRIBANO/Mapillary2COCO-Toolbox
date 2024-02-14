@@ -7,6 +7,7 @@ import shutil
 from pycocotools.coco import COCO
 from pycocotools import mask
 
+NEW_SIZE = NEW_SIZE
 
 def resize_Images(dir_path, saving_path, file_type):
     files_image = []
@@ -27,8 +28,8 @@ def resize_Images(dir_path, saving_path, file_type):
         image_tmp = Image.open(os.path.join(dir_path, image_filename))
         w, h = image_tmp.size
         ratio = w/h
-        down_w = int(550)
-        down_h = int(550//ratio)
+        down_w = int(NEW_SIZE)
+        down_h = int(NEW_SIZE//ratio)
         down_points = (down_w, down_h)
         image_resized = image_tmp.resize(down_points,Image.BICUBIC)
         image_resized = image_resized.save(os.path.join(saving_path, image_filename))
@@ -109,8 +110,8 @@ def resize_Annotations(dir_path, saving_path, file_name):
         image_tmp = Image.fromarray(label*255)
         w, h = image_tmp.size
         ratio = w/h
-        down_w = int(550)
-        down_h = int(550//ratio)
+        down_w = int(NEW_SIZE)
+        down_h = int(NEW_SIZE//ratio)
         down_points = (down_w, down_h)
         image_resized = image_tmp.resize(down_points,Image.BICUBIC)
         image_resized_binary = np.array(image_resized, dtype=np.uint8)

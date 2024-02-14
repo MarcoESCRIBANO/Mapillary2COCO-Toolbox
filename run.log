@@ -5,7 +5,7 @@
 #1 DONE 0.0s
 
 #2 [app internal] load metadata for docker.io/library/python:3.10.12
-#2 DONE 0.7s
+#2 DONE 0.8s
 
 #3 [app internal] load .dockerignore
 #3 transferring context: 2B done
@@ -15,13 +15,13 @@
 #4 DONE 0.0s
 
 #5 [app internal] load build context
-#5 transferring context: 63.91kB done
+#5 transferring context: 34.41kB done
 #5 DONE 0.0s
 
-#6 [app 2/6] RUN apt update -y
+#6 [app 3/6] RUN pip install --upgrade pip
 #6 CACHED
 
-#7 [app 3/6] RUN pip install --upgrade pip
+#7 [app 2/6] RUN apt update -y
 #7 CACHED
 
 #8 [app 4/6] RUN pip install opencv-python-headless numpy imageio scikit-image pycocotools
@@ -35,13 +35,10 @@
 
 #11 [app] exporting to image
 #11 exporting layers 0.0s done
-#11 writing image sha256:5b45bdb6f00c89fc99394417a9442b953df7fbaf5ddcdbf4b5dd859166c90f28 done
+#11 writing image sha256:077bd2af7ce145b3393f233046c90a80fb09215a8579ab15d965ede7d0535c11 done
 #11 naming to docker.io/library/mapillary2coco-master-app done
 #11 DONE 0.0s
  Container Mapillary2COCO  Recreate
  Container Mapillary2COCO  Recreated
-Attaching to Mapillary2COCO
-Gracefully stopping... (press Ctrl+C again to force)
- Container Mapillary2COCO  Stopping
- Container Mapillary2COCO  Stopped
-canceled
+ Container Mapillary2COCO  Starting
+ Container Mapillary2COCO  Started

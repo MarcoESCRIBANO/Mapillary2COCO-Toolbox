@@ -3,9 +3,28 @@
 
 ## Table of Contents
 
+* [Build and Run](#Build-and-Run)
 * [Mapillary to COCO annotations](#Convert-Mapillary-Vistas-Dataset-to-Coco-annotations-format)
 * [Resize images and COCO annotations](#Resize-images-and-COCO-annotations)
 * [Show COCO format mask and bbox on image](#Show-COCO-format-mask-and-bbox-on-image)
+
+
+
+## Build and Run
+
+>compose.yaml
+Put the dataset folder path you want to work with in volumes.
+
+>Dockerfile
+Choose the command you want to execute (ex: ENTRYPOINT [ "python", "/main.py" ] -> convert to COCO)
+
+```zsh
+docker compose up --build &> run.log # Build image, run and save log into a log file
+```
+```zsh
+docker compose up --build -d # Build image and run in background
+```
+
 
 ## Convert Mapillary Vistas Dataset to Coco annotations format
 
@@ -23,6 +42,7 @@ pixel / 256 # the value represents this pixel belongs to which label.
 pixel % 256 # the value represents this pixel is the i-th instance of its label.
 ```
 
+
 ## Resize images and COCO annotations
 
 >resize.py
@@ -35,6 +55,8 @@ It can also match your classes with corresponding COCO classes to evaluate your 
 Rewrite your Json annotations with resized segmentation mask, bbox and image information.
 Resize your dataset images
 Can also rewrite your categorie_id (classe)
+
+
 
 ## Show COCO format mask and bbox on image
 

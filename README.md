@@ -11,7 +11,7 @@
 
 >main.py
 
-This python script helps you convert your mapillary vistas dataset to coco format and choose the classes you want to keep.
+This python script helps you convert your mapillary vistas dataset to coco format and choose the classes you want to keep. (Use main_full_labels.py if you want to convert all Mapillary dataset classes)
 
 #### Brief Introduction
 
@@ -38,6 +38,6 @@ Can also rewrite your categorie_id (classe)
 
 ## Show COCO format mask and bbox on image
 
->ShowMapAnnotation.py
+>showAnnotation.py
 
 This python script helps you visualize your dataset mask and bbox.

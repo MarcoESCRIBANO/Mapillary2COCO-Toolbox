@@ -2,21 +2,16 @@
     This file shows how to load and use the dataset
 """
 
-from __future__ import print_function
-
 import json
 import os
 
 import numpy as np
 import warnings
 
-# matplotlib.use('Agg')
-import imageio
 from PIL import Image
 import multiprocessing as mp
 import pycococreatortools
 import datetime
-import fnmatch
 
 FULL_CPU = True
 
@@ -1635,7 +1630,7 @@ def load_datasets_and_proc(dataset_root, dir_name, files):
     else:
         pool = mp.Pool(os.cpu_count()-4)
 
-    with open("./config.json") as config_file:
+    with open("./config_Full.json") as config_file:
         config = json.load(config_file)
 
     labels = config["labels"]

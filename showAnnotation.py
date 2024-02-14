@@ -1,4 +1,3 @@
-import pycocotools.mask as mask
 from pycocotools.coco import COCO
 import numpy as np
 import cv2

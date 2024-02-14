@@ -2,21 +2,16 @@
     This file shows how to load and use the dataset
 """
 
-# from __future__ import print_function
-
 import json
 import os
 
 import numpy as np
 import warnings
 
-# matplotlib.use('Agg')
-import imageio
 from PIL import Image
 import multiprocessing as mp
 import pycococreatortools
 import datetime
-import fnmatch
 
 FULL_CPU = False
 

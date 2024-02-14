@@ -1,0 +1,13 @@
+services:
+  app:
+    build: 
+      dockerfile: Dockerfile
+    volumes:
+      # - /home/escribano/Documents/Datasets/MapillaryVistasImageTest:/MapillaryVistas
+      # - /home/escribano/Documents/Datasets/MapillaryVistasImageTestResized:/MapillaryVistasResized
+      # - /home/escribano/Documents/Datasets/MapillaryVistasSample:/MapillaryVistas
+      # - /home/escribano/Documents/Datasets/MapillaryVistasSampleResized:/MapillaryVistasResized
+      - /home/escribano/Documents/Datasets/MapillaryVistas:/MapillaryVistas
+      # - /home/escribano/Documents/Datasets/MapillaryVistasResized:/MapillaryVistasResized
+      - /home/escribano/Documents/Datasets/coco:/coco
+    container_name: Mapillary2COCO

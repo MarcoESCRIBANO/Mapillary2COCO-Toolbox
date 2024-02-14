@@ -1,0 +1,151 @@
+{
+    "labels": [
+        {
+            "name": "human--person--individual",
+            "readable": "Person",
+            "instances": true,
+            "evaluate": true,
+            "color": [
+                220,
+                20,
+                60
+            ]
+        },
+        
+        {
+            "name": "human--rider--bicyclist",
+            "readable": "Bicyclist",
+            "instances": true,
+            "evaluate": true,
+            "color": [
+                255,
+                0,
+                0
+            ]
+        },
+        {
+            "name": "human--rider--motorcyclist",
+            "readable": "Motorcyclist",
+            "instances": true,
+            "evaluate": true,
+            "color": [
+                255,
+                0,
+                100
+            ]
+        },
+        {
+            "name": "human--rider--other-rider",
+            "readable": "Other Rider",
+            "instances": true,
+            "evaluate": true,
+            "color": [
+                255,
+                0,
+                200
+            ]
+        },
+        {
+            "name": "object--vehicle--boat",
+            "readable": "Boat",
+            "instances": true,
+            "evaluate": true,
+            "color": [
+                150,
+                0,
+                255
+            ]
+        },
+        {
+            "name": "object--vehicle--bus",
+            "readable": "Bus",
+            "instances": true,
+            "evaluate": true,
+            "color": [
+                0,
+                60,
+                100
+            ]
+        },
+        {
+            "name": "object--vehicle--car",
+            "readable": "Car",
+            "instances": true,
+            "evaluate": true,
+            "color": [
+                0,
+                0,
+                142
+            ]
+        },
+        {
+            "name": "object--vehicle--caravan",
+            "readable": "Caravan",
+            "instances": true,
+            "evaluate": true,
+            "color": [
+                0,
+                0,
+                90
+            ]
+        },
+        {
+            "name": "object--vehicle--motorcycle",
+            "readable": "Motorcycle",
+            "instances": true,
+            "evaluate": true,
+            "color": [
+                0,
+                0,
+                230
+            ]
+        },
+        {
+            "name": "object--vehicle--on-rails",
+            "readable": "On Rails",
+            "instances": true,
+            "evaluate": true,
+            "color": [
+                0,
+                80,
+                100
+            ]
+        },
+        {
+            "name": "object--vehicle--other-vehicle",
+            "readable": "Other Vehicle",
+            "instances": true,
+            "evaluate": true,
+            "color": [
+                128,
+                64,
+                64
+            ]
+        },
+        {
+            "name": "object--vehicle--trailer",
+            "readable": "Trailer",
+            "instances": true,
+            "evaluate": true,
+            "color": [
+                0,
+                0,
+                110
+            ]
+        },
+        {
+            "name": "object--vehicle--truck",
+            "readable": "Truck",
+            "instances": true,
+            "evaluate": true,
+            "color": [
+                0,
+                0,
+                70
+            ]
+        }
+    ],
+    "version": "2.0",
+    "mapping": "mvd20",
+    "folder_structure": "{split}/{content}/{key:.{22}}.{ext}"
+}

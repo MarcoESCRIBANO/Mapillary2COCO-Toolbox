@@ -1,0 +1,52 @@
+#0 building with "default" instance using docker driver
+
+#1 [app internal] load build definition from Dockerfile
+#1 transferring dockerfile: 477B done
+#1 DONE 0.0s
+
+#2 [app internal] load metadata for docker.io/library/python:3.10.12
+#2 DONE 0.3s
+
+#3 [app internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [app 1/6] FROM docker.io/library/python:3.10.12@sha256:bac3a0e0d16125977e351c861e2f4b12ecafeaa6f72431dc970d0b9155103232
+#4 DONE 0.0s
+
+#5 [app internal] load build context
+#5 transferring context: 3.44kB done
+#5 DONE 0.0s
+
+#6 [app 2/6] RUN apt update -y
+#6 CACHED
+
+#7 [app 4/6] RUN pip install opencv-python-headless numpy imageio scikit-image pycocotools
+#7 CACHED
+
+#8 [app 3/6] RUN pip install --upgrade pip
+#8 CACHED
+
+#9 [app 5/6] RUN apt-get install -y libgl1-mesa-dev
+#9 CACHED
+
+#10 [app 6/6] COPY . .
+#10 DONE 0.0s
+
+#11 [app] exporting to image
+#11 exporting layers 0.0s done
+#11 writing image sha256:1e7c871a817a8220bc70a699aa829ae7d4ef7e4f2ab16d4d5f652af295bb1d9b done
+#11 naming to docker.io/library/mapillary2coco-master-app done
+#11 DONE 0.0s
+ Container Mapillary2COCO  Recreate
+ Container Mapillary2COCO  Recreated
+Attaching to Mapillary2COCO
+Mapillary2COCO  | loading annotations into memory...
+Mapillary2COCO  | Done (t=0.03s)
+Mapillary2COCO  | creating index...
+Mapillary2COCO  | index created!
+Mapillary2COCO  | loading annotations into memory...
+Mapillary2COCO  | Done (t=0.12s)
+Mapillary2COCO  | creating index...
+Mapillary2COCO  | index created!
+Mapillary2COCO exited with code 0

@@ -18,7 +18,7 @@ Put the dataset folder path you want to work with in volumes.
 
 >Dockerfile
 
-Choose the command you want to execute (ex: ENTRYPOINT [ "python", "/main.py" ] -> convert to COCO)
+Uncomment the command you want to execute (ex: ENTRYPOINT [ "python", "/main.py" ] -> convert to COCO)
 
 Build and run
 ```zsh
@@ -55,9 +55,10 @@ It can also match your classes with corresponding COCO classes to evaluate your 
 
 #### Brief Introduction
 
+Put the target folder path (where you want your resized dataset) in the compose.yaml file volumes.
 Rewrite your Json annotations with resized segmentation mask, bbox and image information.
-Resize your dataset images
-Can also rewrite your categorie_id (classe)
+Resize your dataset images.
+Can also rewrite your category_id (classes).
 
 
 

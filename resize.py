@@ -16,8 +16,6 @@ TO_COCO_CAT = True
 CAT_MAPPING = {1:1, 2:1, 3:1, 4:1, 5:9, 6:6, 7:3, 8:3, 9:4, 10:7, 11:3, 12:3, 13:8}
 
 
-
-
 def resize_Images(dir_path, saving_path, file_type):
     files_image = []
     i = 0
@@ -49,7 +47,6 @@ def mapCatToCOCOCat(cat_id):
     if cat_id == None:
         cat_id = -1
     return cat_id
-    
 
 
 def resize_Annotations(dir_path, saving_path, file_name):
@@ -115,9 +112,8 @@ def resize_Annotations(dir_path, saving_path, file_name):
                 count.append(counter)
                 value = not value
                 counter = 0
-        if counter != 0:
-            counter += 1
-            count.append(counter)
+        counter += 1
+        count.append(counter)
             
         assert sum(count) == down_w * down_h
         

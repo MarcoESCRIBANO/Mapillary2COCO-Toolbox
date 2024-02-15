@@ -12,8 +12,8 @@ RUN apt-get install -y libgl1-mesa-dev
 COPY . .
 
 # ENTRYPOINT [ "python", "/main.py" ]
-# ENTRYPOINT [ "python", "/resize.py" ]
-ENTRYPOINT [ "python", "/showAnnotation.py"]
+ENTRYPOINT [ "python", "/resize.py" ]
+# ENTRYPOINT [ "python", "/showAnnotation.py"]
 
 
 

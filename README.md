@@ -1,4 +1,4 @@
-# Mapillary dataset tool box
+# Mapillary dataset toolbox
 
 
 ## Table of Contents

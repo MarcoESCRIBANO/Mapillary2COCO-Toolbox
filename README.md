@@ -41,8 +41,8 @@ Based on instance images in Mapillary vistas dataset.
 In this `instance` image, label info is embeded into each pixel value.
 
 ```python
-pixel / 256 # the value represents this pixel belongs to which label.
-pixel % 256 # the value represents this pixel is the i-th instance of its label.
+pixel / 256 # this value represents the label that this pixel belongs to.
+pixel % 256 # this value represents that this pixel is the i-th instance of its label.
 ```
 
 

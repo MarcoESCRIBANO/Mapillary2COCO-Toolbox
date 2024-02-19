@@ -6,8 +6,8 @@ import os
 
 ### Set parameters ###
 
-# MAP_DATASET_PATH = "/MapillaryVistas/"
-MAP_DATASET_PATH = "/MapillaryVistasResized/"
+MAP_DATASET_PATH = "/MapillaryVistas/"
+# MAP_DATASET_PATH = "/MapillaryVistasResized/"
 
 TRAIN_VAL_PATH = "training"
 # TRAIN_VAL_PATH = "validation"
@@ -74,7 +74,7 @@ for ann in anns:
     added_image = cv2.addWeighted(background, 1, overlay, 0.75, 0)
     
     cv2.rectangle(added_image, (int(bbox[0]), int(bbox[1])), 
-                  (int(bbox[2]), int(bbox[3])), tuple(color), 1)
+                  (int(bbox[2]), int(bbox[3])), tuple(color), 2)
     
     cv2.imwrite(save_labeled_image_path, added_image)
 

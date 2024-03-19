@@ -25,6 +25,9 @@ CPU_REDUCTION = 4
 # For running large dataset (split the execution in batch to be able to run in part, to not restart from scratch if it crash)
 BATCH_SIZE = 600 
 
+# For resume after an interruption (num of the batch where it will resume) 
+STARTING_BATCH = 0
+
 LICENSES = [
     {
         "id": 1,
@@ -345,13 +348,16 @@ def main(dir_name, dataset_root, sample_type):
     files = []
     i = 0
     for f in os.listdir(dir_path):
-        if i > BATCH_SIZE//10 and i % BATCH_SIZE == 1:
-            files_list.append(files)
-            files = []
         if f.endswith("png"):
             files.append(f)
             i += 1
             print("Loading image {}: {}".format(i, f))
+        if i > BATCH_SIZE//10 and i % BATCH_SIZE == 0:
+            files_list.append(files)
+            files = []
+    if len(files) > 0:
+        files_list.append(files)
+        files = []
 
     # Pre-create needed image paths
     if (
@@ -368,18 +374,17 @@ def main(dir_name, dataset_root, sample_type):
         for files in files_list:
             batch+=1
             print("Batch n°{}".format(batch))
-            if batch > 0:
+            if batch >= STARTING_BATCH:
                 load_datasets_and_proc(dataset_root, dir_name, files)
 
     combined_annotations = {
-        "info": INFO,
         "licenses": LICENSES,
         "categories": CATEGORIES,
         "images": [],
         "annotations": [],
     }
 
-    for idx in range(int(len(files))):
+    for idx in range(i):
         each_image_json = readout_each_image(dataset_root, dir_name, idx + 1)
         combined_annotations["images"].extend(each_image_json["images"])
         combined_annotations["annotations"].extend(

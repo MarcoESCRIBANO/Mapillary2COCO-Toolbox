@@ -1625,7 +1625,7 @@ def each_sub_proc(file_name, dir_name, dataset_root, image_id, labels, each_imag
         json.dump(each_image_json, fp)
 
 
-def load_datasets_and_proc(dataset_root, dir_name, files):
+def load_datasets_and_proc(dataset_root, dir_name, files, i):
     warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
     each_image_json = dict({"images": [], "annotations": []})
 
@@ -1634,7 +1634,7 @@ def load_datasets_and_proc(dataset_root, dir_name, files):
     else:
         pool = mp.Pool(os.cpu_count()-CPU_REDUCTION)
 
-    with open("./config_Full.json") as config_file:
+    with open("./config.json") as config_file:
         config = json.load(config_file)
 
     labels = config["labels"]
@@ -1645,7 +1645,7 @@ def load_datasets_and_proc(dataset_root, dir_name, files):
                 image_filename,
                 dir_name,
                 dataset_root,
-                idx + 1,
+                i + idx + 1,
                 labels,
                 each_image_json,
             ),
@@ -1698,7 +1698,7 @@ def main(dir_name, dataset_root, sample_type):
             batch+=1
             print("Batch n°{}".format(batch))
             if batch >= STARTING_BATCH:
-                load_datasets_and_proc(dataset_root, dir_name, files)
+                load_datasets_and_proc(dataset_root, dir_name, files, (batch-1)*BATCH_SIZE)
 
     combined_annotations = {
         "licenses": LICENSES,

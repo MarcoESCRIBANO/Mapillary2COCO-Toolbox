@@ -2,144 +2,117 @@ from PIL import Image
 import os
 import multiprocessing as mp
 import numpy as np
-import json
 import shutil
 from pycocotools.coco import COCO
 from pycocotools import mask
+import pycococreatortools
+import ujson
 
 ### Set parameters ###
 
 NEW_SIZE = 550
-TO_COCO_CAT = True
 
-# CAT_MAPPING: {old_cat:new_cat,...} (new_cat is the COCO equivalent to your old_cat who is the mapillary cat)
-CAT_MAPPING = {1:1, 2:1, 3:1, 4:1, 5:9, 6:6, 7:3, 8:3, 9:4, 10:7, 11:3, 12:3, 13:8}
-
-
-def resize_Images(dir_path, saving_path, file_type):
-    files_image = []
-    i = 0
-    for f in os.listdir(dir_path):
-        if f.endswith(file_type):
-            files_image.append(f)
-            i += 1
-            
+def resize(dir_image_path, saving_image_path,dir_annotation_path, saving_annotation_path, val_train):        
     # Pre-create needed image paths
     if (
-        os.path.exists(saving_path)
+        os.path.exists(saving_image_path)
         is False
     ):
-        os.makedirs(saving_path)
+        os.makedirs(saving_image_path)
 
-    for idx, image_filename in enumerate(files_image):
-        image_tmp = Image.open(os.path.join(dir_path, image_filename))
-        w, h = image_tmp.size
-        ratio = w/h
-        down_w = int(NEW_SIZE)
-        down_h = int(NEW_SIZE//ratio)
-        down_points = (down_w, down_h)
-        image_resized = image_tmp.resize(down_points,Image.BICUBIC)
-        image_resized = image_resized.save(os.path.join(saving_path, image_filename))
-        
-
-def mapCatToCOCOCat(cat_id):
-    cat_id = CAT_MAPPING.get(cat_id)
-    if cat_id == None:
-        cat_id = -1
-    return cat_id
-
-
-def resize_Annotations(dir_path, saving_path, file_name):
     # Pre-create needed file paths
     if (
-        os.path.exists(saving_path)
+        os.path.exists(saving_annotation_path)
         is False
     ):
-        os.makedirs(saving_path)
+        os.makedirs(saving_annotation_path)
         
-    dir_path = "{}/{}".format(dir_path, file_name)
-    saving_path = "{}/{}".format(saving_path, file_name)
+    dir_path = "{}/{}".format(dir_annotation_path, val_train)
+    saving_path = "{}/{}".format(saving_annotation_path, val_train)
     shutil.copyfile(dir_path, saving_path)
         
     Map = COCO(dir_path)
-    
-    ann_ids = Map.getAnnIds(iscrowd=True)
-    anns = Map.loadAnns(ann_ids)
-    last_image_id = -1
-    
-    for ann in anns:
-        segm = ann['segmentation']
-        ann_id = ann['id']
-        image_id = ann["image_id"]
-        
-        if TO_COCO_CAT:
-            # For quick eval on models pre-trained on COCO
-            cat_id = ann["category_id"]
-            cat_id = mapCatToCOCOCat(cat_id)
-        
-        assert sum(segm['counts']) == segm['size'][0] * segm['size'][1]
-
-        # Draw RLE label
-        label = np.zeros(segm['size'], np.uint8).reshape(-1)
-        ids = 0
-        value = 0
-        for c in segm['counts']:
-            label[ids: ids+c] = value
-            value = not value
-            ids += c
-        
-        label = label.reshape(segm['size'], order='F') # order='F' means Fortran memory order
-        
-        image_tmp = Image.fromarray(label*255)
-        w, h = image_tmp.size
-        ratio = w/h
-        down_w = int(NEW_SIZE)
-        down_h = int(NEW_SIZE//ratio)
-        down_points = (down_w, down_h)
-        image_resized = image_tmp.resize(down_points,Image.BICUBIC)
-        image_resized_binary = np.array(image_resized, dtype=np.uint8)
-        image_resized = image_resized_binary.reshape(down_w*down_h, order='F')
-        image_resized = image_resized//255
-        
-        count = []
-        value = 0
-        counter = -1
-        for id in image_resized:
-            if id == value:
-                counter+=1
-            else:
-                counter += 1
-                count.append(counter)
-                value = not value
-                counter = 0
-        counter += 1
-        count.append(counter)
+    with open(saving_path, 'r+') as f:
+        data = ujson.load(f)
+        # Resize images
+        for idx, image in Map.imgs.items():
+            image_tmp = Image.open(os.path.join(dir_image_path, image["file_name"]))
+            w, h = image_tmp.size
+            ratio = w/h
+            down_w = int(NEW_SIZE)
+            down_h = int(NEW_SIZE//ratio)
+            down_points = (down_w, down_h)
+            image_resized = image_tmp.resize(down_points,Image.BICUBIC)
+            image_resized = image_resized.save(os.path.join(saving_image_path, image["file_name"]))
             
-        assert sum(count) == down_w * down_h
-        
-        with open(saving_path, 'r+') as f:
-            data = json.load(f)
-            data['annotations'][ann_id-1]['segmentation']['counts'] = count 
-            data['annotations'][ann_id-1]['segmentation']['size'] = [down_h, down_w]
+            data['images'][idx-1]['width'] = down_w
+            data['images'][idx-1]['height'] = down_h
+
+        # Resize annotations where is is_crowd is True
+        ann_ids = Map.getAnnIds(iscrowd=True)
+        anns = Map.loadAnns(ann_ids)
+        for ann in anns:
+            ann_id = ann['id']
+            image_id = ann['image_id']
+            down_w = data['images'][image_id-1]['width']
+            down_h = data['images'][image_id-1]['height']
+            image = data['images'][image_id-1]
+            image_tmp = Image.open(os.path.join(dir_image_path, image["file_name"]))
+            w, h = image_tmp.size
+            bbox = ann["bbox"]
+            Bmask = Map.annToMask(ann)
+            down_points = (down_w, down_h)
+
+            Bmask = pycococreatortools.resize_binary_mask(Bmask,down_points)
+            binary_mask_encoded = mask.encode(np.asfortranarray(Bmask.astype(np.uint8)))
+
+            area = mask.area(binary_mask_encoded)
+            rle = pycococreatortools.binary_mask_to_rle(Bmask)
+            
+            data['annotations'][ann_id-1]['segmentation'] = rle
+            data['annotations'][ann_id-1]['area'] = int(area)
+
             data['annotations'][ann_id-1]['width'] = down_w
             data['annotations'][ann_id-1]['height'] = down_h
-            bbox = data['annotations'][ann_id-1]['bbox']
             data['annotations'][ann_id-1]['bbox'] = [round(bbox[0]*down_w/w,1), round(bbox[1]*down_h/h,1), round(bbox[2]*down_w/w,1), round(bbox[3]*down_h/h,1)]
-            data['annotations'][ann_id-1]['area'] = int(mask.area(mask.encode(np.asfortranarray(image_resized_binary.astype(np.uint8)))))
-            
-            if TO_COCO_CAT:
-                # For quick eval on models pre-trained on COCO
-                data['annotations'][ann_id-1]['category_id'] = cat_id
-                data['annotations'][ann_id-1]['iscrowd'] = 0
-            
-            if  image_id != last_image_id:
-                data['images'][image_id-1]['width'] = down_w
-                data['images'][image_id-1]['height'] = down_h
-                last_image_id = image_id  
-            f.seek(0)  
-            json.dump(data, f)
-            f.truncate() 
-         
+
+        # Resize annotations where is is_crowd is False
+        ann_ids = Map.getAnnIds(iscrowd=False)
+        anns = Map.loadAnns(ann_ids)
+        for ann in anns:
+            ann_id = ann['id']
+            image_id = ann['image_id']
+            down_w = data['images'][image_id-1]['width']
+            down_h = data['images'][image_id-1]['height']
+            image = data['images'][image_id-1]
+            image_tmp = Image.open(os.path.join(dir_image_path, image["file_name"]))
+            w, h = image_tmp.size
+            bbox = ann["bbox"]
+            Bmask = Map.annToMask(ann)
+            down_points = (down_w, down_h)
+
+            Bmask = pycococreatortools.resize_binary_mask(Bmask,down_points)
+            binary_mask_encoded = mask.encode(np.asfortranarray(Bmask.astype(np.uint8)))
+
+            area = mask.area(binary_mask_encoded)
+            poly = pycococreatortools.binary_mask_to_polygon(Bmask,2)
+
+            data['annotations'][ann_id-1]['segmentation'] = poly 
+            if data['annotations'][ann_id-1]['segmentation'] == []:
+                rle = pycococreatortools.binary_mask_to_rle(Bmask)
+                data['annotations'][ann_id-1]['segmentation'] = rle
+                data['annotations'][ann_id-1]['iscrowd'] = 1
+            data['annotations'][ann_id-1]['area'] = int(area)
+
+            data['annotations'][ann_id-1]['width'] = down_w
+            data['annotations'][ann_id-1]['height'] = down_h
+            data['annotations'][ann_id-1]['bbox'] = [round(bbox[0]*down_w/w,1), round(bbox[1]*down_h/h,1), round(bbox[2]*down_w/w,1), round(bbox[3]*down_h/h,1)]
+
+
+        # Save modification in the COCO annotation JSON        
+        f.seek(0)  
+        ujson.dump(data, f)
+        f.truncate() 
 
 def main(dir_name_train, dir_name_val, dataset_root):
     pool = mp.Pool(os.cpu_count()-4)
@@ -152,10 +125,11 @@ def main(dir_name_train, dir_name_val, dataset_root):
     
     saving_image_path = "{}Resized/{}/images".format(dataset_root, dir_name_train)
     saving_annotation_path = "{}Resized/{}/v2.0".format(dataset_root, dir_name_train)
-    
-    pool.apply_async(resize_Images,args=(dir_image_path, saving_image_path, "jpg"))
-    pool.apply_async(resize_Annotations,args=(dir_annotation_path, saving_annotation_path, "instances_shape_training2020.json"))
-    
+
+    pool.apply_async(resize,args=(dir_image_path, saving_image_path,dir_annotation_path, saving_annotation_path, "instances_shape_training2020.json"))
+    # resize(dir_image_path, saving_image_path,dir_annotation_path, saving_annotation_path, "instances_shape_training2020.json")
+
+
     # 
     # Validation data
     #     
@@ -165,8 +139,8 @@ def main(dir_name_train, dir_name_val, dataset_root):
     saving_image_path = "{}Resized/{}/images".format(dataset_root, dir_name_val)
     saving_annotation_path = "{}Resized/{}/v2.0".format(dataset_root, dir_name_val)
     
-    pool.apply_async(resize_Images,args=(dir_image_path, saving_image_path, "jpg"))
-    pool.apply_async(resize_Annotations,args=(dir_annotation_path, saving_annotation_path, "instances_shape_validation2020.json"))
+    pool.apply_async(resize,args=(dir_image_path, saving_image_path,dir_annotation_path, saving_annotation_path, "instances_shape_validation2020.json"))
+    # resize(dir_image_path, saving_image_path,dir_annotation_path, saving_annotation_path, "instances_shape_validation2020.json")
 
     pool.close()
     pool.join()

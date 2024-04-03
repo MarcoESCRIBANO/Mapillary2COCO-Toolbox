@@ -20,12 +20,14 @@ Put the dataset folder path you want to work with in volumes.
 
 Uncomment the command you want to execute (ex: ENTRYPOINT [ "python", "/main.py" ] -> convert to COCO)
 
-Build and run
+Build and run:
 ```zsh
-docker compose up --build &> run.log # Build image, run and save log into a log file
+# Build image, run and save log into a log file
+docker compose up --build &> run.log 
 ```
 ```zsh
-docker compose up --build -d # Build image and run in background
+# Build image and run in background
+docker compose up --build -d 
 ```
 
 
@@ -50,15 +52,12 @@ pixel % 256 # this value represents that this pixel is the i-th instance of its 
 
 >resize.py
 
-This python script helps you resize your transformed mapillary vistas datasets to fit your model.
-It can also match your classes with corresponding COCO classes to evaluate your dataset on models pre-trained on COCO.
+This python script helps you resize the images in your transformed mapillary vistas datasets annotations to fit your model.
 
 #### Brief Introduction
 
-Put the target folder path (where you want your resized dataset) in the compose.yaml file volumes.
-Rewrite your Json annotations with resized segmentation mask, bbox and image information.
-Resize your dataset images.
-Can also rewrite your category_id (classes).
+Put the target folder path (where you want your resized dataset) in the compose.yaml file volumes. \
+The algorithm rewrite your Json annotations with resized segmentation mask, bbox and image information and also resize your dataset images.
 
 
 

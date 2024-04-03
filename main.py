@@ -19,7 +19,7 @@ import datetime
 # FULL_CPU: True will use the maximal capabilities of your cpu (can slow down your computer) 
 FULL_CPU = False
 
-# Reduce the cpu count by 4 when FULL_CPU is False
+# Reduce the cpu count by n when FULL_CPU is False
 CPU_REDUCTION = 4 
 
 # For running large dataset (split the execution in batch to be able to run in part, to not restart from scratch if it crash)
@@ -38,7 +38,7 @@ LICENSES = [
 
 CATEGORIES = [
     {
-        "id": 1,
+        "id": 0,
         "name": "Person",
         "supercategory": "human--person--individual",
         "color": [
@@ -48,37 +48,7 @@ CATEGORIES = [
             ]
     },
     {
-        "id": 2,
-        "name": "Bicyclist",
-        "supercategory": "human--rider--bicyclist",
-        "color": [
-                255,
-                0,
-                0
-            ]
-    },
-    {
-        "id": 3,
-        "name": "Motorcyclist",
-        "supercategory": "human--rider--motorcyclist",
-        "color": [
-                255,
-                0,
-                100
-            ]
-    },
-    {
-        "id": 4,
-        "name": "Other_Rider",
-        "supercategory": "human--rider--other-rider",
-        "color": [
-                255,
-                0,
-                200
-            ]
-    },
-    {
-        "id": 5,
+        "id": 1,
         "name": "Boat",
         "supercategory": "object--vehicle--boat",
         "color": [
@@ -98,7 +68,7 @@ CATEGORIES = [
             ]
     },
     {
-        "id": 7,
+        "id": 3,
         "name": "Car",
         "supercategory": "object--vehicle--car",
         "color": [
@@ -108,17 +78,7 @@ CATEGORIES = [
             ]
     },
     {
-        "id": 8,
-        "name": "Caravan",
-        "supercategory": "object--vehicle--caravan",
-        "color": [
-                0,
-                0,
-                90
-            ]
-    },
-    {
-        "id": 9,
+        "id": 4,
         "name": "Motorcycle",
         "supercategory": "object--vehicle--motorcycle",
         "color": [
@@ -128,7 +88,7 @@ CATEGORIES = [
             ]
     },
     {
-        "id": 10,
+        "id": 5,
         "name": "On_Rails",
         "supercategory": "object--vehicle--on-rails",
         "color": [
@@ -138,27 +98,7 @@ CATEGORIES = [
             ]
     },
     {
-        "id": 11,
-        "name": "Other_Vehicle",
-        "supercategory": "object--vehicle--other-vehicle",
-        "color": [
-                128,
-                64,
-                64
-            ]
-    },
-    {
-        "id": 12,
-        "name": "Trailer",
-        "supercategory": "object--vehicle--trailer",
-        "color": [
-                0,
-                0,
-                110
-            ]
-    },
-    {
-        "id": 13,
+        "id": 6,
         "name": "Truck",
         "supercategory": "object--vehicle--truck",
         "color": [
@@ -180,9 +120,9 @@ def split_to_coco_creator(input_instance_array, labels):
     
     # Replacing values
     label_image_info[label_image_info < 30]=14
-    label_image_info[(label_image_info > 34)&(label_image_info < 105)]=14
+    label_image_info[(label_image_info > 34)&(label_image_info < 106)]=14
     label_image_info[(label_image_info > 115)]=14
-    d = {30:0, 32:1, 33:2, 34:3, 105:4, 106:14, 107:5, 108:6, 109:7, 110:8, 111:9, 112:10, 113:11, 114:12}
+    d = {30:0, 32:14, 33:14, 34:14, 106:1, 107:2, 108:3, 109:14, 110:4, 111:5, 112:14, 113:14, 114:6}
     for i,j in d.items():
         label_image_info[label_image_info==i] = j
         
@@ -229,33 +169,21 @@ def split_to_coco_creator(input_instance_array, labels):
 
 
 def convert_class_id(annotation_filename):
-    class_id = 0
+    class_id = 14
     if "Person" == annotation_filename:
-        class_id = 1
-    elif "Bicyclist" == annotation_filename:
-        class_id = 2
-    elif "Motorcyclist" == annotation_filename:
-        class_id = 3
-    elif "Other Rider" == annotation_filename:
-        class_id = 4
+        class_id = 0
     elif "Boat" == annotation_filename:
-        class_id = 5
+        class_id = 1
     elif "Bus" == annotation_filename:
-        class_id = 6
+        class_id = 2
     elif "Car" == annotation_filename:
-        class_id = 7
-    elif "Caravan" == annotation_filename:
-        class_id = 8
+        class_id = 3
     elif "Motorcycle" == annotation_filename:
-        class_id = 9
+        class_id = 4
     elif "On Rails" == annotation_filename:
-        class_id = 10
-    elif "Other Vehicle" == annotation_filename:
-        class_id = 11
-    elif "Trailer" == annotation_filename:
-        class_id = 12
+        class_id = 5
     elif "Truck" == annotation_filename:
-        class_id = 13
+        class_id = 6
     return class_id
 
 
@@ -277,17 +205,38 @@ def each_sub_proc(file_name, dir_name, dataset_root, image_id, labels, each_imag
     segmentation_id = 1
     for item in image_label_instance_infomatrix:
         class_id = convert_class_id(item["label_name"])
-        category_info = {"id": class_id, "is_crowd": 1}
+        category_info = {"id": class_id, "is_crowd": 0}
+        alternative_category_info = {"id": class_id, "is_crowd": 1}
         binary_mask = item["image"]
+        try:
+            annotation_info = pycococreatortools.create_annotation_info(
+                segmentation_id,
+                image_id,
+                category_info,
+                binary_mask,
+                instance_image.size,
+                tolerance=2,
+            )
+        except Exception as e:  # Catch any exception
+            print(f"Error creating annotation with is_crowd: {category_info['is_crowd']}")
+            print(f"Error message: {e}")
 
-        annotation_info = pycococreatortools.create_annotation_info(
-            segmentation_id,
-            image_id,
-            category_info,
-            binary_mask,
-            instance_image.size,
-            tolerance=2,
-        )
+            # Try with a different category_info value (if available)
+            if alternative_category_info:
+                try:
+                    annotation_info = pycococreatortools.create_annotation_info(
+                        segmentation_id,
+                        image_id,
+                        alternative_category_info,
+                        binary_mask,
+                        instance_image.size,
+                        tolerance=2,
+                    )
+                    print("Successfully created annotation with alternative category_info.")
+                except Exception as e2:
+                    print(f"Error creating annotation with alternative is_crowd: {alternative_category_info['is_crowd']}")
+                    print(f"Error message: {e2}")
+
         if annotation_info is not None:
             each_image_json["annotations"].append(annotation_info)
             segmentation_id = segmentation_id + 1
@@ -409,5 +358,5 @@ if __name__ == "__main__":
     dataset_root = ""
     dir_name_train = "MapillaryVistas/training/v2.0"
     dir_name_val = "MapillaryVistas/validation/v2.0"
-    main(dir_name_train, dataset_root, "training")
     main(dir_name_val, dataset_root, "validation")
+    main(dir_name_train, dataset_root, "training")

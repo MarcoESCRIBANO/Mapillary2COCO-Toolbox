@@ -51,7 +51,7 @@ def binary_mask_to_polygon(binary_mask, tolerance=0):
         binary_mask, pad_width=1, mode="constant", constant_values=0
     )
     contours = measure.find_contours(padded_binary_mask, 0.5)
-    contours = np.subtract(contours, 1)
+    # contours = np.subtract(contours, 1)
     for contour in contours:
         contour = close_contour(contour)
         contour = measure.approximate_polygon(contour, tolerance)

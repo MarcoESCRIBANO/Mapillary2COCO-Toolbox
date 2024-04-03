@@ -15,12 +15,8 @@ TRAIN_VAL_PATH = "training"
 # TRAIN_VAL_PATH = "validation"
 
 
-
 Map = COCO(MAP_DATASET_PATH + TRAIN_VAL_PATH + "/v2.0/instances_shape_" + TRAIN_VAL_PATH + "2020.json")
 
-# if "Resized" in MAP_DATASET_PATH:
-#     ann_ids = Map.getAnnIds(iscrowd=False)
-# else:
 ann_ids = Map.getAnnIds(iscrowd=True)
 anns = Map.loadAnns(ann_ids)
 cats = Map.cats
@@ -85,10 +81,8 @@ for ann in anns:
 
 
 
-
 ann_ids = Map.getAnnIds(iscrowd=False)
 anns = Map.loadAnns(ann_ids)
-# anns = [ann for ann in anns if len(ann['segmentation']) > 1]
 print("num of annotations with more than one polygan:", len(anns))    # 3522
 cats = Map.cats
 last_image_id = -1
@@ -115,10 +109,9 @@ for i, ann in enumerate(anns):
 
     segs = [np.array(seg, np.int32).reshape((1, -1, 2))
             for seg in segs]
-    # print("segs2: {}".format(segs))
+
     for seg in segs: image = cv2.drawContours(image, seg, -1, tuple(color), 1)
-    # third aug -1 means draw all contours in 3-D array, Or
-    # for seg in segs: cv2.fillPoly(image, segm, (0,255,0))
+
     cv2.rectangle(image, (int(bbox[0]), int(bbox[1])), 
                   (int(bbox[2]), int(bbox[3])), tuple(color), 1)
 

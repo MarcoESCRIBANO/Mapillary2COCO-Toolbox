@@ -127,8 +127,6 @@ def main(dir_name_train, dir_name_val, dataset_root):
     saving_annotation_path = "{}Resized/{}/v2.0".format(dataset_root, dir_name_train)
 
     pool.apply_async(resize,args=(dir_image_path, saving_image_path,dir_annotation_path, saving_annotation_path, "instances_shape_training2020.json"))
-    # resize(dir_image_path, saving_image_path,dir_annotation_path, saving_annotation_path, "instances_shape_training2020.json")
-
 
     # 
     # Validation data
@@ -140,7 +138,6 @@ def main(dir_name_train, dir_name_val, dataset_root):
     saving_annotation_path = "{}Resized/{}/v2.0".format(dataset_root, dir_name_val)
     
     pool.apply_async(resize,args=(dir_image_path, saving_image_path,dir_annotation_path, saving_annotation_path, "instances_shape_validation2020.json"))
-    # resize(dir_image_path, saving_image_path,dir_annotation_path, saving_annotation_path, "instances_shape_validation2020.json")
 
     pool.close()
     pool.join()
